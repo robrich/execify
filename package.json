@@ -1,0 +1,35 @@
+{
+  "name": "execify",
+  "description": "A module for shimmimg between execution modes: streams, promises, and callbacks",
+  "version": "0.1.0",
+  "homepage": "https://github.com/robrich/execify",
+  "repository": "git://github.com/robrich/execify.git",
+  "author": "Rob Richardson (http://robrich.org/)",
+  "main": "./index.js",
+  "keywords": [
+    "task",
+    "exec",
+    "stream",
+    "promise"
+  ],
+  "dependencies": {
+    "q": "~0.9.7",
+    "event-stream": "~3.0.16"
+  },
+  "devDependencies": {
+    "mocha": "~1.13.0",
+    "should": "~2.0.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">= 0.8"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/robrich/execify/raw/master/LICENSE"
+    }
+  ]
+}
