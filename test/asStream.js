@@ -32,12 +32,13 @@ describe('execify', function() {
 		});
 
 		it('should run callback task', function(done) {
-			var task, a = 0, s;
+			var task, args, a = 0, s;
 
 			// Arrange
-			task = function (cb) {
+			args = {a:'rgs'};
+			task = function (data, cb) {
 				a++;
-				cb(null);
+				cb(null, data);
 			};
 
 			// Act
@@ -48,7 +49,7 @@ describe('execify', function() {
 				a.should.equal(1);
 				done();
 			});
-			s.write();
+			s.write(args);
 			s.end();
 		});
 

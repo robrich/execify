@@ -77,7 +77,8 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (cb) {
+				return es.map(function (data, cb) {
+					// FRAGILE: stream.write() with no args passes undefined as first arg
 					cb(null);
 				});
 			};
