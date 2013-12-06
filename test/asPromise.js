@@ -78,8 +78,9 @@ describe('execify', function() {
 			task = function () {
 				a++;
 				return es.map(function (data, cb) {
-					// FRAGILE: stream.write() with no args passes undefined as first arg
-					cb(null);
+					// FRAGILE: stream.write() with no args sometimes passes undefined as first arg, sometimes doesn't pass it
+					var cbArg = arguments[arguments.length-1];
+					cbArg(null);
 				});
 			};
 
