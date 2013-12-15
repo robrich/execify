@@ -77,11 +77,13 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (data, cb) {
+				return es.readable(function(count, callback) {
+					this.emit('end');
+				}).pipe(es.map(function (data, cb) {
 					// FRAGILE: stream.write() with no args sometimes passes undefined as first arg, sometimes doesn't pass it
 					var cbArg = arguments[arguments.length-1];
 					cbArg(null);
-				});
+				}));
 			};
 
 			// Act

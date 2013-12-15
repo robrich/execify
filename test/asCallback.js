@@ -74,9 +74,11 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (cb) {
+				return es.readable(function(count, callback) {
+					this.emit('end');
+				}).pipe(es.map(function (cb) {
 					cb(null);
-				});
+				}));
 			};
 
 			// Act
