@@ -88,6 +88,37 @@ describe('execify', function() {
 			});
 		});
 
+		it('should run stream task that writes multiple times', function(done) {
+			var task, a = 0, args = {a:'rgs'}, a0 = {i:0}, a1 = {i:1}, timeout = 50;
+
+			// Arrange
+			task = function () {
+				a++;
+				var s = es.map(function (inargs, cb) {
+					cb(null, inargs);
+				});
+				setTimeout(function () {
+					s.write(a0);
+					s.write(a1);
+					s.end();
+				}, timeout);
+				return s;
+			};
+
+			// Act
+			execify.asCallback(task, [args], function (err, results) {
+
+				// Assert
+				a.should.equal(1);
+				should.exist(results);
+				results.length.should.equal(3);
+				results[0].should.equal(args);
+				results[1].should.equal(a0);
+				results[2].should.equal(a1);
+				done();
+			});
+		});
+
 		it('should return thrown error', function (done) {
 			var task, expectedMessage, a = 0;
 
