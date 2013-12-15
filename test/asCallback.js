@@ -74,9 +74,11 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (cb) {
+				return es.readable(function(count, callback) {
+					this.emit('end');
+				}).pipe(es.map(function (cb) {
 					cb(null);
-				});
+				}));
 			};
 
 			// Act
@@ -84,6 +86,37 @@ describe('execify', function() {
 
 				// Assert
 				a.should.equal(1);
+				done();
+			});
+		});
+
+		it('should not write undefined to stream or end stream if no args are passed', function(done) {
+			var task, actualData, timesWritten = 0, sampleData = {
+				abc: 123
+			};
+
+			// Arrange
+			task = function () {
+				return es.readable(function(count, callback) {
+					if (count === 1) {
+						return this.emit('end');
+					}
+					this.emit('data', sampleData);
+					callback();
+				}).pipe(es.map(function(data, cb) {
+					timesWritten++;
+					actualData = data;
+					cb(null, data);
+				}));
+			};
+
+			// Act
+			execify.asCallback(task, function (err, results) {
+				timesWritten.should.equal(1);
+				should(err).equal(null);
+				should(actualData).equal(sampleData);
+
+				// Assert
 				done();
 			});
 		});
