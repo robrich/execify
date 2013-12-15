@@ -69,14 +69,18 @@ describe('execify', function() {
 		});
 
 		it('should run stream task', function(done) {
-			var task, a = 0;
+			var task, a = 0, timeout = 50;
 
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (cb) {
+				var s = es.map(function (cb) {
 					cb(null);
 				});
+				setTimeout(function () {
+					s.end();
+				}, timeout);
+				return s;
 			};
 
 			// Act

@@ -72,16 +72,20 @@ describe('execify', function() {
 		});
 
 		it('should run stream task and not write with no args', function(done) {
-			var task, a = 0, b = 0, p;
+			var task, a = 0, b = 0, p, timeout = 50;
 
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (data, cb) {
+				var s = es.map(function (data, cb) {
 					should.exist(data);
 					b++;
 					cb(null, data);
 				});
+				setTimeout(function () {
+					s.end();
+				}, timeout);
+				return s;
 			};
 
 			// Act
@@ -96,21 +100,25 @@ describe('execify', function() {
 		});
 
 		it('should run stream task and write with args', function(done) {
-			var task, a = 0, b = 0, p, sampleData = {a:123};
+			var task, args = {a:123}, a = 0, b = 0, p, timeout = 50;
 
 			// Arrange
 			task = function () {
 				a++;
-				return es.map(function (data, cb) {
+				var s = es.map(function (data, cb) {
 					should.exist(data);
-					data.should.equal(sampleData);
+					data.should.equal(args);
 					b++;
 					cb(null, data);
 				});
+				setTimeout(function () {
+					s.end();
+				}, timeout);
+				return s;
 			};
 
 			// Act
-			p = execify.asPromise(task, [sampleData]);
+			p = execify.asPromise(task, [args]);
 			p.then(function (/*err, results*/) {
 
 				// Assert
