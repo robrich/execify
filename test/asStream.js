@@ -44,7 +44,6 @@ describe('execify', function() {
 			// Act
 			s = execify.asStream(task);
 			s.on('end', function () {
-
 				// Assert
 				a.should.equal(1);
 				done();
