@@ -1,7 +1,7 @@
 {
   "name": "execify",
   "description": "A module for shimmimg between execution modes: streams, promises, and callbacks",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/robrich/execify",
   "repository": "git://github.com/robrich/execify.git",
   "author": "Rob Richardson (http://robrich.org/)",
@@ -13,8 +13,8 @@
     "promise"
   ],
   "dependencies": {
-    "q": "0.9.7",
-    "event-stream": "3.0.18"
+    "q": "~0.9.7",
+    "event-stream": "~3.0.18"
   },
   "devDependencies": {
     "mocha": "~1.15.1",

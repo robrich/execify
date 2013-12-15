@@ -69,12 +69,12 @@ describe('execify', function() {
 		});
 
 		it('should run stream task', function(done) {
-			var task, a = 0, timeout = 50;
+			var task, a = 0;
 
 			// Arrange
 			task = function () {
 				a++;
-				return es.readable(function(count, callback) {
+				return es.readable(function(/*count, callback*/) {
 					this.emit('end');
 				}).pipe(es.map(function (cb) {
 					cb(null);
