@@ -4,7 +4,7 @@
 
 var execify = require('../');
 var Q = require('q');
-var es = require('event-stream');
+var map = require('map-stream');
 var should = require('should');
 require('mocha');
 
@@ -78,23 +78,35 @@ describe('execify', function() {
 		});
 
 		/* TODO: why does this terminate process after asStream's runTask's cb calls [].slice.call(arguments) in map-stream's index.js?
-		it('should run stream task', function(done) {
-			var task, args = {a:'rgs'}, a = 0, s;
+		it('should run stream task passed args', function(done) {
+			var task, args = {a:'rgs'}, a = 0, b = 0, s, timeout = 1;
 
 			// Arrange
 			task = function () {
+				a.should.equal(0);
 				a++;
-				return es.map(function (data, cb) {
+				var innerStream = map(function (data, cb) {
 					cb(null, data);
 				});
+				setTimeout(function () {
+					innerStream.end();
+				}, timeout);
+				return innerStream;
 			};
 
 			// Act
 			s = execify.asStream(task);
+			s.on('data', function (results) {
+				b++;
+				should.exist(results);
+				results.length.should.equal(1);
+				results[0].should.equal(args);
+			});
 			s.on('end', task, function () {
 
 				// Assert
 				a.should.equal(1);
+				b.should.equal(1);
 				done();
 			});
 			s.write(args);

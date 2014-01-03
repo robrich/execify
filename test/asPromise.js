@@ -4,7 +4,7 @@
 
 var execify = require('../');
 var Q = require('q');
-var es = require('event-stream');
+var map = require('map-stream');
 var should = require('should');
 require('mocha');
 
@@ -77,7 +77,7 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				var s = es.map(function (data, cb) {
+				var s = map(function (data, cb) {
 					should.exist(data);
 					b++;
 					cb(null, data);
@@ -105,7 +105,7 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				var s = es.map(function (data, cb) {
+				var s = map(function (data, cb) {
 					should.exist(data);
 					data.should.equal(args);
 					b++;

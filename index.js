@@ -3,7 +3,7 @@
 "use strict";
 
 var Q = require('q');
-var es = require('event-stream');
+var map = require('map-stream');
 var validateTask = require('./lib/validateTask');
 var runTask = require('./lib/runTask');
 
@@ -30,7 +30,7 @@ var asPromise = function (task, args) {
 // FRAGILE: if task is a stream task this is incredibly inefficient
 var asStream = function (task) {
 	validateTask(task);
-	return es.map(function (/*data, cb*/) {
+	return map(function (/*data, cb*/) {
 		// compensate for s.write() (no args) or s.write(a,b,c) (many args)
 		var args = Array.prototype.slice.call(arguments);
 		var cb = args.pop();

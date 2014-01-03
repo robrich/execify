@@ -4,6 +4,7 @@
 
 var execify = require('../');
 var Q = require('q');
+var map = require('map-stream');
 var es = require('event-stream');
 var should = require('should');
 require('mocha');
@@ -76,7 +77,7 @@ describe('execify', function() {
 				a++;
 				return es.readable(function(/*count, callback*/) {
 					this.emit('end');
-				}).pipe(es.map(function (cb) {
+				}).pipe(map(function (cb) {
 					cb(null);
 				}));
 			};
@@ -96,7 +97,7 @@ describe('execify', function() {
 			// Arrange
 			task = function () {
 				a++;
-				var s = es.map(function (inargs, cb) {
+				var s = map(function (inargs, cb) {
 					cb(null, inargs);
 				});
 				setTimeout(function () {
@@ -134,7 +135,7 @@ describe('execify', function() {
 					}
 					this.emit('data', sampleData);
 					callback();
-				}).pipe(es.map(function(data, cb) {
+				}).pipe(map(function(data, cb) {
 					timesWritten++;
 					actualData = data;
 					cb(null, data);
@@ -142,12 +143,13 @@ describe('execify', function() {
 			};
 
 			// Act
-			execify.asCallback(task, function (err, results) {
+			execify.asCallback(task, function (err/*, results*/) {
+
+				// Assert
 				timesWritten.should.equal(1);
 				should(err).equal(null);
 				should(actualData).equal(sampleData);
 
-				// Assert
 				done();
 			});
 		});
